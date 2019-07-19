@@ -33,4 +33,6 @@ ext/libtool
 .idea/compiler.xml
 .idea/description.html
 .idea/misc.xml
+.idea/
+out/
 
