@@ -30,3 +30,7 @@ ext/.deps
 ext/libtool
 ._.gitignore
 .idea/workspace.xml
+.idea/compiler.xml
+.idea/description.html
+.idea/misc.xml
+
