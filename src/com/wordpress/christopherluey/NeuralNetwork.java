@@ -7,6 +7,7 @@ class NeuralNetwork {
     int iNodes;
     int hNodes;
     int oNodes;
+    int h2Nodes;
 
     WeighedMatrix whi;
     WeighedMatrix whh;
@@ -19,14 +20,15 @@ class NeuralNetwork {
     WeighedMatrix oo;
     WeighedMatrix in;
 
-    NeuralNetwork(int inputs, int hiddenNo, int outputNo) {
+    NeuralNetwork(int inputs, int hiddenNo, int hiddenNo2, int outputNo) {
 
         iNodes = inputs;
         oNodes = outputNo;
         hNodes = hiddenNo;
+        h2Nodes = hiddenNo2;
 
-        whi = new WeighedMatrix(hNodes, iNodes +1);
-        whh = new WeighedMatrix(hNodes, hNodes +1);
+        whi = new WeighedMatrix(h2Nodes, iNodes +1);
+        whh = new WeighedMatrix(hNodes, h2Nodes +1);
         woh = new WeighedMatrix(oNodes, hNodes +1);
 
         whi.randomizeWeights();
@@ -64,7 +66,6 @@ class NeuralNetwork {
         WeighedMatrix outputs = outputInputs.activate();
         oo = outputs;
 
-        //System.out.println("Decision Reached");
         return outputs.toArray();
     }
 
@@ -79,7 +80,6 @@ class NeuralNetwork {
             builder.append(whiArr[i]);
             if(i < whiArr.length - 1)
                 builder.append(",");
-
         }
 
         builder.append("\n");
@@ -97,7 +97,6 @@ class NeuralNetwork {
             if(i < wohArr.length - 1)
                 builder.append(",");
         }
-
 
         try {
             File file = new File("/Volumes/Lexar/neuralnets/" + type + j + ".txt");
@@ -158,18 +157,11 @@ class NeuralNetwork {
             for (int j = 0; j < woh.cols-1; j++){
                 float weight = woh.getFloat(i, j);
                 float outputOutput = oo.getFloat(i, 0);
-//                System.out.println("outputOuput " + outputOutput);
                 float hiddenOutput = ho2.getFloat(j, 0);
-                //System.out.println("hiddenOutput" + hiddenOutput);
-                float outputNew = 1-outputOutput;
-//                System.out.println("outputNew " + outputNew);
-                float idk = outputOutput*outputNew;
-                //System.out.println();
-//                System.out.println("idk " + idk);
-//                System.out.println("Error " + error[i]);
-                float newValue = weight + lr*error[i]*hiddenOutput*idk;
-//                System.out.println("Old Value " + weight);
-//                System.out.println("New Value " + newValue);
+                float outputNew = (float)1.0-outputOutput;
+                float sigmoidDerived = outputOutput*outputNew;
+                float errorCalc = (desired[i] - outputOutput) * -1;
+                float newValue = weight - (lr*errorCalc*hiddenOutput*sigmoidDerived);
                 woh.setMatrix(i, j, newValue);
             }
         }
@@ -179,7 +171,6 @@ class NeuralNetwork {
                 float count = 0;
                 for (int f = 0; f < woh.rows; f++) {
                     float outputOutput = finalDecision[f];
-                    float errorCalc = outputOutput - desired[f];
                     float total = error[f] * outputOutput * (1 - outputOutput) * woh.getFloat(f, i);
                     count += total;
                 }
@@ -190,18 +181,7 @@ class NeuralNetwork {
                 float hiddenOuputfarnew = 1 - hiddenOuputfar;
                 float newWeight = weight - lr*hiddenOuputfarnew*hiddenOuputfar*hiddenOuputclose*count;
                 whh.setMatrix(i, j, newWeight);
-
             }
-
-
-//            for (int j = 0; j < whh.cols-1; j++){
-//                float weight = whh.getFloat(i, j);
-//                float hiddenOuputfar = ho2.getFloat(i, 0);
-//                float hiddenOuputclose = ho.getFloat(j, 0);
-//                float hiddenOuputfarnew = 1 - hiddenOuputfar;
-//                float newValue = weight + lr*error2*hiddenOuputclose*hiddenOuputfar*hiddenOuputfarnew;
-//                whh.setMatrix(i, j, newValue);
-//            }
         }
 
 
@@ -210,7 +190,6 @@ class NeuralNetwork {
             float count = 0;
             for (int f = 0; f < woh.rows; f++) {
                 float outputOutput = finalDecision[f];
-                float errorCalc = outputOutput - desired[f];
                 float total = error[f] * outputOutput * (1 - outputOutput) * woh.getFloat(f, g);
                 count += total;
             }
@@ -226,9 +205,7 @@ class NeuralNetwork {
                 float total2 = hi2.getFloat(u, 0) * whh.getFloat(u, i);
                 sup += total2;
             }
-
             ho.setMatrix(i, 0, sup);
-
         }
 
         for (int i = 0; i < whi.rows; i++){
@@ -240,15 +217,6 @@ class NeuralNetwork {
                 float newWeight = weight - lr*hiddenOuputfarnew*hiddenOuputfar*inputs;
                 whi.setMatrix(i, j, newWeight);
             }
-
-//            for (int j = 0; j < whi.cols-1; j++){
-//                float weight = whi.getFloat(i, j);
-//                float hiddenOutputclose = ho.getFloat(i, 0);
-//                float inputOuput = in.getFloat(j, 0);
-//                float hiddenOuputclosenew = 1 - hiddenOutputclose;
-//                float newValue = weight + lr*error2*inputOuput*hiddenOutputclose*hiddenOuputclosenew;
-//                whi.setMatrix(i, j, newValue);
-//            }
         }
 
     }
