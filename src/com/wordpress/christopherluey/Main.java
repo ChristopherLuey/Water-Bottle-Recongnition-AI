@@ -15,7 +15,7 @@ public class Main {
         int successes = 0;
         int attempts = 0;
         float successRate = (float)0.0;
-        int trainingIterations = 2;
+        int trainingIterations = 1000;
 
         System.out.println("Creating Neural Networks...");
         ultimateBrain = new NeuralNetwork(10000, 100, 100, 5);
@@ -27,7 +27,7 @@ public class Main {
             File f = new File("/Volumes/Lexar/image");
             files = new ArrayList<>(Arrays.asList(Objects.requireNonNull(f.listFiles())));
             files.remove(0);
-//            Collections.shuffle(files);
+            Collections.shuffle(files);
             for (File file : files) {
                 BufferedImage buffer = ImageIO.read(file);
                 images.add(buffer);
@@ -178,16 +178,16 @@ public class Main {
                     }
                 }
             }
-//            try {
-//                Collections.shuffle(files);
-//                images.clear();
-//                imageType.clear();
-//                for (File file : files) {
-//                    BufferedImage buffer = ImageIO.read(file);
-//                    images.add(buffer);
-//                    imageType.add(file.getName());
-//                }
-//            } catch (Exception e){}
+            try {
+                Collections.shuffle(files);
+                images.clear();
+                imageType.clear();
+                for (File file : files) {
+                    BufferedImage buffer = ImageIO.read(file);
+                    images.add(buffer);
+                    imageType.add(file.getName());
+                }
+            } catch (Exception e){}
             successRate = (((float) successes) / attempts) * 100;
         }
 
