@@ -15,7 +15,7 @@ public class Main {
         int successes = 0;
         int attempts = 0;
         float successRate = (float)0.0;
-        int trainingIterations = 1;
+        int trainingIterations = 2;
 
         System.out.println("Creating Neural Networks...");
         ultimateBrain = new NeuralNetwork(10000, 100, 100, 5);
