@@ -3,12 +3,10 @@ package com.wordpress.christopherluey;
 import java.io.*;
 
 class NeuralNetwork {
-
     int iNodes;
     int hNodes;
     int oNodes;
     int h2Nodes;
-
     WeighedMatrix whi;
     WeighedMatrix whh;
     WeighedMatrix woh;
@@ -21,56 +19,40 @@ class NeuralNetwork {
     WeighedMatrix in;
 
     NeuralNetwork(int inputs, int hiddenNo, int hiddenNo2, int outputNo) {
-
         iNodes = inputs;
         oNodes = outputNo;
         hNodes = hiddenNo;
         h2Nodes = hiddenNo2;
-
         whi = new WeighedMatrix(h2Nodes, iNodes +1);
         whh = new WeighedMatrix(hNodes, h2Nodes +1);
         woh = new WeighedMatrix(oNodes, hNodes +1);
-
         whi.randomizeWeights();
         whh.randomizeWeights();
         woh.randomizeWeights();
     }
 
     float[] output(float[] inputsArr) {
-
-        //System.out.println("Neural Network Running Through Decision Matrix...");
         WeighedMatrix inputs = woh.singleColumnMatrixFromArray(inputsArr);
         in = inputs;
-
         WeighedMatrix inputsBias = inputs.addBias();
-
         WeighedMatrix hiddenInputs = whi.dot(inputsBias);
         hi = hiddenInputs;
-
         WeighedMatrix hiddenOutputs = hiddenInputs.activate();
         ho = hiddenOutputs;
-
         WeighedMatrix hiddenOutputsBias = hiddenOutputs.addBias();
-
         WeighedMatrix hiddenInputs2 = whh.dot(hiddenOutputsBias);
         hi2 = hiddenInputs2;
-
         WeighedMatrix hiddenOutputs2 = hiddenInputs2.activate();
         ho2 = hiddenOutputs2;
-
         WeighedMatrix hiddenOutputsBias2 = hiddenOutputs2.addBias();
-
         WeighedMatrix outputInputs = woh.dot(hiddenOutputsBias2);
         oi = outputInputs;
-
         WeighedMatrix outputs = outputInputs.activate();
         oo = outputs;
-
         return outputs.toArray();
     }
 
     public void saveNeuralNetworktoTXT(int j, String type) {
-
         float[] whiArr = whi.toArray();
         float[] whhArr = whh.toArray();
         float[] wohArr = woh.toArray();
@@ -81,30 +63,23 @@ class NeuralNetwork {
             if(i < whiArr.length - 1)
                 builder.append(",");
         }
-
         builder.append("\n");
-
         for(int i = 0; i < whhArr.length; i++) {
             builder.append(whhArr[i]);
             if(i < whhArr.length - 1)
                 builder.append(",");
         }
-
         builder.append("\n");
-
         for(int i = 0; i < wohArr.length; i++) {
             builder.append(wohArr[i]+"");
             if(i < wohArr.length - 1)
                 builder.append(",");
         }
-
         try {
             File file = new File("/Volumes/Lexar/neuralnets/" + type + j + ".txt");
-
             FileWriter writer = new FileWriter(file.getAbsoluteFile());
             writer.write(builder.toString());
             writer.close();
-
         } catch (IOException e) { e.printStackTrace(); }
     }
 
@@ -174,7 +149,6 @@ class NeuralNetwork {
                     float total = error[f] * outputOutput * (1 - outputOutput) * woh.getFloat(f, i);
                     count += total;
                 }
-
                 float weight = whh.getFloat(i, j);
                 float hiddenOuputfar = ho2.getFloat(i, 0);
                 float hiddenOuputclose = ho.getFloat(j, 0);
@@ -255,5 +229,4 @@ class NeuralNetwork {
             }
         }
     }
-
 }

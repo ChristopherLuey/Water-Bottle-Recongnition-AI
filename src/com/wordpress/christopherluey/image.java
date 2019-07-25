@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
 public class image {
-
     private BufferedImage img;
     private int[][] rMatrix;
     private int[][] gMatrix;
@@ -19,7 +18,6 @@ public class image {
     private float[][] bConMatrixFloat;
     private float[][] grConMatrixFloat;
     private float[] idkGrSomething;
-
     private float[] rFloatMatrix;
     private float[] gFloatMatrix;
     private float[] bFloatMatrix;
@@ -27,7 +25,6 @@ public class image {
 
     public image(BufferedImage i){
         img = i;
-
     }
 
     public float[] parseImage(){
@@ -49,56 +46,12 @@ public class image {
                 grMatrix[i][j] = 1- ((float)(rMatrix[i][j] + bMatrix[i][j] + gMatrix[i][j])) / (float)765;
                 float idk = ((float)(rMatrix[i][j] + bMatrix[i][j] + gMatrix[i][j])) / (float)3;
                 idkGrSomething[i*100+j] = grMatrix[i][j];
-                //System.out.println(idkGrSomething[i*j]);
             }
         }
-//
-//        int y = 0;
-//        for (int j = 0; j<idkGrSomething.length; j++){
-//            if(0.2>idkGrSomething[j] && idkGrSomething[j]>0.1){
-//                System.out.print("0 ");
-//            } else if(idkGrSomething[j]>0.2 && idkGrSomething[j]<0.3){
-//                System.out.print("1 ");
-//            } else if(idkGrSomething[j]>0.3 && idkGrSomething[j]<0.4){
-//                System.out.print("2 ");
-//            } else if(idkGrSomething[j]>0.4 && idkGrSomething[j]<0.5){
-//                System.out.print("3 ");
-//            }else if(idkGrSomething[j]>0.5 && idkGrSomething[j]<0.6){
-//                System.out.print("4 ");
-//            }else if(idkGrSomething[j]>0.6 && idkGrSomething[j]<0.7){
-//                System.out.print("5 ");
-//            }else if(idkGrSomething[j]>0.7 && idkGrSomething[j]<0.8){
-//                System.out.print("6 ");
-//            }else if(idkGrSomething[j]>0.8 && idkGrSomething[j]<0.9){
-//                System.out.print("7 ");
-//            }else if(idkGrSomething[j]>0.9 && idkGrSomething[j]<=1){
-//                System.out.print("8 ");
-//            }
-//            else{
-//                System.out.print("- ");
-//            }
-//            y++;
-//            if(y==100){
-//                System.out.println();
-//                y=0;
-//            }
-//        }
-
-//        for(int i = 0; i< grMatrix.length; i++){
-//            for(int j = 0; j<grMatrix[0].length;j++){
-//                if(grMatrix[i][j]>0.3){
-//                    System.out.print("0 ");
-//                } else{
-//                    System.out.print("- ");
-//                }
-//            }
-//            System.out.println();
-//        }
         return idkGrSomething;
     }
 
     public void consolidate(){
-        //System.out.println("Consolidating Image");
         int x = img.getWidth() / 100;
         int y = img.getHeight() / 100;
         int a = img.getHeight() - (img.getHeight()%100);
@@ -140,8 +93,6 @@ public class image {
         gConMatrixFloat = new float[gConMatrix.length][gConMatrix[0].length];
         bConMatrixFloat = new float[bConMatrix.length][bConMatrix[0].length];
         grConMatrixFloat = new float[grConMatrix.length][grConMatrix[0].length];
-
-
         for (int i = 0; i < rConMatrix.length; i++){
             for (int j = 0; j <rConMatrix[i].length; j++){
                 rConMatrixFloat[i][j] = ((float)rConMatrix[i][j]) / (float)255;
@@ -159,36 +110,28 @@ public class image {
         gFloatMatrix = new float[10000];
         bFloatMatrix = new float[10000];
         grFloatMatrix = new float[10000];
-
         int count = 0;
-
         for (int i = 0; i<100; i++){
             for (int j = 0; j<100; j++){
                 rFloatMatrix[count] = rConMatrixFloat[i][j];
                 count++;
             }
         }
-
         count = 0;
-
         for (int i = 0; i<100; i++){
             for (int j = 0; j<100; j++){
                 bFloatMatrix[count] = bConMatrixFloat[i][j];
                 count++;
             }
         }
-
         count = 0;
-
         for (int i = 0; i<100; i++){
             for (int j = 0; j<100; j++){
                 gFloatMatrix[count] = gConMatrixFloat[i][j];
                 count++;
             }
         }
-
         count = 0;
-
         for (int i = 0; i<100; i++){
             for (int j = 0; j<100; j++){
                 grFloatMatrix[count] = grConMatrixFloat[i][j];
@@ -220,17 +163,6 @@ public class image {
     }
 
     public float[] getIdkGrSomething() {
-//        int x = 0;
-//        for (int i = 0; i<idkGrSomething.length; i++){
-//            System.out.printf("%.2f", idkGrSomething[i]);
-//            System.out.print(" ");
-//            x++;
-//            if(x==100){
-//                System.out.println();
-//                x=0;
-//            }
-//        }
-
         int y = 0;
         for (int j = 0; j<idkGrSomething.length; j++){
             if(idkGrSomething[j]>0.4){
@@ -246,5 +178,4 @@ public class image {
         }
         return idkGrSomething;
     }
-
 }
