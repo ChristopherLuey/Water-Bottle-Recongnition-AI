@@ -7,6 +7,7 @@ class NeuralNetwork {
     int hNodes;
     int oNodes;
     int h2Nodes;
+
     WeighedMatrix whi;
     WeighedMatrix whh;
     WeighedMatrix woh;
@@ -17,6 +18,9 @@ class NeuralNetwork {
     WeighedMatrix oi;
     WeighedMatrix oo;
     WeighedMatrix in;
+    WeighedMatrix whiAvg;
+    WeighedMatrix whhAvg;
+    WeighedMatrix wohAvg;
 
     NeuralNetwork(int inputs, int hiddenNo, int hiddenNo2, int outputNo) {
         iNodes = inputs;
@@ -29,6 +33,12 @@ class NeuralNetwork {
         whi.randomizeWeights();
         whh.randomizeWeights();
         woh.randomizeWeights();
+        whiAvg = whi;
+        whhAvg = whh;
+        wohAvg = woh;
+        whiAvg.setAllZero();
+        whhAvg.setAllZero();
+        wohAvg.setAllZero();
     }
 
     float[] output(float[] inputsArr) {
@@ -126,7 +136,7 @@ class NeuralNetwork {
 
     }
 
-    public void backPropagate(float[] error, float lr, float[] finalDecision, float error2, float[] desired){
+    public void backPropagate(float[] error, float lr, float[] finalDecision, int iterations, float[] desired){
         System.out.print(" Backpropagating");
         for (int i = 0; i < woh.rows; i++){
             for (int j = 0; j < woh.cols-1; j++){
@@ -136,8 +146,13 @@ class NeuralNetwork {
                 float outputNew = (float)1.0-outputOutput;
                 float sigmoidDerived = outputOutput*outputNew;
                 float errorCalc = (desired[i] - outputOutput) * -1;
-                float newValue = weight - (lr*errorCalc*hiddenOutput*sigmoidDerived);
-                woh.setMatrix(i, j, newValue);
+                float newNotweight = -1 * (lr*errorCalc*hiddenOutput*sigmoidDerived);
+                wohAvg.setMatrix(i, j, wohAvg.getFloat(i, j) + newNotweight);
+                if (iterations % 10 == 0) {
+                    float newValue = weight + wohAvg.getFloat(i, j)/(float)10;
+                    woh.setMatrix(i, j, newValue);
+                    wohAvg.setMatrix(i, j, 0);
+                }
             }
         }
 
@@ -153,8 +168,13 @@ class NeuralNetwork {
                 float hiddenOuputfar = ho2.getFloat(i, 0);
                 float hiddenOuputclose = ho.getFloat(j, 0);
                 float hiddenOuputfarnew = 1 - hiddenOuputfar;
-                float newWeight = weight - lr*hiddenOuputfarnew*hiddenOuputfar*hiddenOuputclose*count;
-                whh.setMatrix(i, j, newWeight);
+                float newNotWeight = -1 * (lr*hiddenOuputfarnew*hiddenOuputfar*hiddenOuputclose*count);
+                whhAvg.setMatrix(i, j, whhAvg.getFloat(i,j) + newNotWeight);
+                if(iterations % 10 == 0) {
+                    float newWeight = weight +whhAvg.getFloat(i,j)/(float)10;
+                    whh.setMatrix(i, j, newWeight);
+                    whhAvg.setMatrix(i, j, 0);
+                }
             }
         }
 
@@ -188,8 +208,13 @@ class NeuralNetwork {
                 float hiddenOuputfar = ho.getFloat(i, 0);
                 float inputs = in.getFloat(j, 0);
                 float hiddenOuputfarnew = 1 - hiddenOuputfar;
-                float newWeight = weight - lr*hiddenOuputfarnew*hiddenOuputfar*inputs;
-                whi.setMatrix(i, j, newWeight);
+                float newNotWeight = -1 * (lr*hiddenOuputfarnew*hiddenOuputfar*inputs);
+                whiAvg.setMatrix(i, j, whiAvg.getFloat(i,j) + newNotWeight);
+                if (iterations % 10 == 0){
+                    float newWeight = weight +whiAvg.getFloat(i,j)/(float)10;
+                    whi.setMatrix(i, j, newWeight);
+                    whiAvg.setMatrix(i, j, 0);
+                }
             }
         }
 

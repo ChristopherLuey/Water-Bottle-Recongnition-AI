@@ -56,6 +56,14 @@ public class WeighedMatrix {
         }
     }
 
+    public void setAllZero() {
+        for (int i =0; i<rows; i++) {
+            for (int j = 0; j<cols; j++) {
+                matrix[i][j] = 0;
+            }
+        }
+    }
+
     public WeighedMatrix activate() {
         WeighedMatrix n = new WeighedMatrix(rows, cols);
         for (int i =0; i<rows; i++) {
@@ -94,7 +102,7 @@ public class WeighedMatrix {
         for (int i =0; i<rows; i++) {
             n.matrix[i][0] = matrix[i][0];
         }
-        n.matrix[rows][0] = 1;
+        n.matrix[rows][0] = (float)0.5;
         return n;
     }
 

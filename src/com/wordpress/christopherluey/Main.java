@@ -11,7 +11,7 @@ public class Main {
         ArrayList<String> imageType = new ArrayList<>();
         NeuralNetwork ultimateBrain;
         float[] finalDecision;
-        float learningRate = (float) 0.25;
+        float learningRate = (float) 0.01;
         int successes = 0;
         int attempts = 0;
         float successRate = (float)0.0;
@@ -19,7 +19,7 @@ public class Main {
 
         System.out.println("Creating Neural Networks...");
         ultimateBrain = new NeuralNetwork(10000, 100, 100, 5);
-        loadBrains(ultimateBrain);
+        //loadBrains(ultimateBrain);
 
         ArrayList<File> files = null;
         try {
@@ -111,7 +111,7 @@ public class Main {
                             System.out.print(" " + false);
                             errorArray = errorCalculation(s2[0], finalDecision, errorArray);
                             error = 1 - max;
-                            ultimateBrain.backPropagate(errorArray, learningRate, finalDecision, error, desired);
+                            ultimateBrain.backPropagate(errorArray, learningRate, finalDecision, attempts, desired);
                         }
 
                     } else if (maxIndex == 1) {
@@ -125,7 +125,7 @@ public class Main {
                             System.out.print(" " + false);
                             errorArray = errorCalculation(s2[0], finalDecision, errorArray);
                             error = 1 - max;
-                            ultimateBrain.backPropagate(errorArray, learningRate, finalDecision, error, desired);
+                            ultimateBrain.backPropagate(errorArray, learningRate, finalDecision, attempts, desired);
                         }
 
                     } else if (maxIndex == 2) {
@@ -139,7 +139,7 @@ public class Main {
                             System.out.print(" " + false);
                             errorArray = errorCalculation(s2[0], finalDecision, errorArray);
                             error = 1 - max;
-                            ultimateBrain.backPropagate(errorArray, learningRate, finalDecision, error, desired);
+                            ultimateBrain.backPropagate(errorArray, learningRate, finalDecision, attempts, desired);
                         }
 
                     } else if (maxIndex == 3) {
@@ -153,7 +153,7 @@ public class Main {
                             System.out.print(" " + false);
                             errorArray = errorCalculation(s2[0], finalDecision, errorArray);
                             error = 1 - max;
-                            ultimateBrain.backPropagate(errorArray, learningRate, finalDecision, error, desired);
+                            ultimateBrain.backPropagate(errorArray, learningRate, finalDecision, attempts, desired);
                         }
 
                     } else if (maxIndex == 4) {
@@ -167,7 +167,7 @@ public class Main {
                             System.out.print(" " + false);
                             errorArray = errorCalculation(s2[0], finalDecision, errorArray);
                             error = 1 - max;
-                            ultimateBrain.backPropagate(errorArray, learningRate, finalDecision, error, desired);
+                            ultimateBrain.backPropagate(errorArray, learningRate, finalDecision, attempts, desired);
                         }
                     }
                     successRate = (((float) successes) / attempts) * 100;
